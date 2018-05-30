@@ -1,0 +1,47 @@
+{
+  "name": "MERN-portfolio-materialui",
+  "version": "1.0.0",
+  "description": "MERN boilerplate designed with Material UI",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run test",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/serendipity1004/MERN-portfolio-materialui.git"
+  },
+  "keywords": [
+    "React",
+    "Material",
+    "UI",
+    "NodeJS",
+    "MongoDB",
+    "Boilerplate"
+  ],
+  "author": "Ji Ho Choi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/serendipity1004/MERN-portfolio-materialui/issues"
+  },
+  "homepage": "https://github.com/serendipity1004/MERN-portfolio-materialui#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "moment": "^2.22.1",
+    "mongoose": "^5.0.7",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "validator": "^10.2.0",
+    "winston": "^3.0.0-rc1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.17.1"
+  }
+}
