@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { ModalButton } from './../../containers';
+import { LogInForm } from './../../components';
 
 import { withStyles } from 'material-ui/styles';
 
@@ -10,14 +10,14 @@ const styles = theme => ({
     }
 });
 
-class Root extends Component {
+class LogIn extends Component {
     render() {
         return (
             <Fragment>
-                <ModalButton />
+                <LogInForm />
             </Fragment>
         )
     }
 }
 
-export default withStyles (styles) (Root);
+export default withStyles (styles) (LogIn);

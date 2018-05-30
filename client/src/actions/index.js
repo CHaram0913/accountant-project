@@ -3,8 +3,41 @@ import axios from 'axios';
 import * as TYPES from './types';
 import { intervalArray } from './../resources';
 
+export function createAccount(form) {
+    let accountDetail = {
+        email: form.email,
+        password: form.password
+    }
+
+    return async dispatch => {
+        let response = await axios.post('/api/user/create_account', accountDetail);
+
+        dispatch({
+            type : TYPES.CREATE_ACCOUNT,
+            payload : response.data
+        });
+    };
+}
+
+export function logInToAccount(form) {
+    let accountDetail = {
+        email: form.email,
+        password: form.password
+    }
+
+    return async dispatch => {
+        let response = await axios.post('/api/user/login', accountDetail);
+
+        dispatch({
+            type : TYPES.LOG_IN,
+            payload : response.data
+        });
+    };
+}
+
 export function handleModal(modal_state) {
     return dispatch => {
+        
         dispatch({
             type: TYPES.UPDATE_MODAL, 
             payload: modal_state

@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { Field, reduxForm } from 'redux-form';
 import AutoSuggest from 'react-autosuggest';
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
@@ -104,7 +103,7 @@ class AutoSuggestComponent extends Component {
     };
 
     render() {
-        const { classes, input, label, suggestions } = this.props;
+        const { classes, input, label } = this.props;
 
         return (
             <AutoSuggest

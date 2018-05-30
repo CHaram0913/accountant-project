@@ -41,8 +41,14 @@ UserSchema.pre('save', function (next) {
 UserSchema.methods.verifyPassword = function (password) {
     let user = this;
 
-    bcrypt.compare(password, user.password, (err, res) => {
-        return res;
+    return new Promise ((resolve, reject) => {
+        bcrypt.compare(password, user.password, (err, res) => {
+            if (res) {
+                resolve(user);
+            } else {
+                reject();
+            }
+        });
     });
 };
 

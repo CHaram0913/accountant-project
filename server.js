@@ -56,24 +56,28 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(
-    async function (email, password, done) {
-        try {
-            let user = await User.findOne({ email });
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+},
 
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            } else {
-                if (!user.verifyPassword) {
-                    return done(null, false, { message: 'Incorrect password.' });
-                } else {
-                    return done(null, user);
-                }
-            }
-        } catch (e) {
-            return done(e);
+async function (username, password, done) {
+    try {
+        let user = await User.findOne({ email: username });
+
+        if (!user) {
+            return done(null, false, { message: 'Incorrect username.' });
+        } else {
+            user.verifyPassword(password).then((data) => {
+                return done(null, user);
+            }).catch(() => {
+                return done(null, false, { message: 'Incorrect password.' });
+            })
         }
+    } catch (e) {
+        return done(e);
     }
+}
 ));
 
 passport.serializeUser(function (user, done) {
@@ -86,10 +90,6 @@ passport.deserializeUser(function (_id, done) {
     });
 });
 
-app.get('/', (req, res) => {
-    res.send('hi');
-})
-
 require('./routes/records')(app);
 require('./routes/user')(app);
 
@@ -99,3 +99,7 @@ require('./routes/user')(app);
 app.listen(CONFIGS.PORT, () => {
     logger.info(`Server Running at PORT : ${CONFIGS.PORT}`);
 });
+
+module.exports = {
+    passport
+}

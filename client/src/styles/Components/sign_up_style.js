@@ -2,7 +2,7 @@ export default
 {
     root: {
         width: '500px',
-        height: '400px',
+        height: '500px',
         margin: 'auto',
         marginTop: '100px',
         padding: '40px'
@@ -16,6 +16,6 @@ export default
     },
     form_button: {
         marginTop: '50px',
-        marginLeft: '330px'
+        marginLeft: '320px'
     }
 };

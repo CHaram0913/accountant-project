@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import history from '../services/history';
 import { mainRoutes } from '../routes';
 import Reboot from 'material-ui/Reboot';
@@ -7,23 +7,29 @@ import Reboot from 'material-ui/Reboot';
 const mainSwitch = (
     <Switch>
         {mainRoutes.map(function (item, index) {
-            return (
-                item.wrapper ? 'Something else' : <Route key={ index } path={ item.path } component={ item.component }/>
-            )
+            if (!index) {
+                return (
+                    <Route exact key={index} path={item.path} component={item.component} />
+                )
+            } else {
+                return (
+                    <Route key={index} path={item.path} component={item.component} />
+                )
+            }
         })}
+        <Redirect to={'/'} />
     </Switch>
 );
 
 export default class App extends Component {
-
     render() {
         return (
-            <div>
-                <Reboot/>
+            <Fragment>
+                <Reboot />
                 <Router history={history}>
                     { mainSwitch }
                 </Router>
-            </div>
+            </Fragment>
         );
     }
 }

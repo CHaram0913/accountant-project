@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui/styles';
-import { Paper, Modal, Typography, TextField, Checkbox, Select, MenuItem, Grid, Button } from 'material-ui';
+import { Paper, Typography, TextField, Checkbox, Select, MenuItem, Grid, Button } from 'material-ui';
 
 import { addTransactionRecord, handleModal, clearPostResult } from './../../actions';
 
@@ -38,7 +38,7 @@ const validate = values => {
     ];
 
     requiredFields.map(field => {
-        if (!values[field]) {
+        if (!values[field] && values[field] !== 0) {
             errors[field] = 'This field is required.'
         }
     });
@@ -52,6 +52,7 @@ class RecordModal extends Component {
 
         this.closeModal = this.closeModal.bind(this);
     }
+    
     renderCalenderField(field) {
         return (
             <Fragment>

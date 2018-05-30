@@ -4,7 +4,7 @@ module.exports = app => {
     app.post('/api/record/add', async (req, res) => {
         try {
             let newRecord = new Record({
-                account: 'awefawefawef',//req.body.account, //req.session.passport._id, //CHECK
+                account: req.session.passport.user,
                 recordTime: req.body.recordTime,
                 amount: req.body.amount,
                 category: {
