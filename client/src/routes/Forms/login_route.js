@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { LogInForm } from './../../components';
+import { LogInForm } from './../../containers';
 
 import { withStyles } from 'material-ui/styles';
 

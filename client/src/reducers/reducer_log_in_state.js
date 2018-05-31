@@ -2,10 +2,7 @@ import * as TYPES from './../actions/types';
 
 export default function (state = {}, action) {
     switch (action.type) {
-        case TYPES.POST_TRANSACTION:
-            return action.payload
-
-        case TYPES.CLEAR_POST_RECORD_RESULT:
+        case TYPES.CHECK_LOG_IN_STATE:
             return action.payload
 
         default:

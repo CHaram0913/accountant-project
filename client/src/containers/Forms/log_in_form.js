@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { Link } from 'react-router-dom';
+import history from './../../services/history';
 
 import { withStyles } from 'material-ui/styles';
-import { Paper, TextField, Button, Typography } from 'material-ui';
+import { Paper, TextField, Button, Typography, Grid } from 'material-ui';
 import { LoginStyle } from './../../styles';
 
-import { logInToAccount } from './../../actions';
+import { logInToAccount, clearPostLogInResult } from './../../actions';
 
 const validate = values => {
     const errors = {};
@@ -26,7 +28,14 @@ const validate = values => {
 
 class LogInForm extends Component {
     async onSubmit(values) {
-        this.props.logInToAccount(values);
+        await this.props.logInToAccount(values);
+
+        if (this.props.postLogInResult.accountLoggedIn) {
+            this.props.clearPostLogInResult();
+            history.push('/')
+        } else {
+            console.log(this.props.postLogInResult.message)
+        }
     }
 
     renderField(field) {
@@ -73,14 +82,24 @@ class LogInForm extends Component {
                             component={this.renderField}
                             classes={classes}
                         />
-                        <Button 
-                            variant='raised' 
-                            color='primary' 
-                            className={classes.form_button}
-                            type='submit'
-                        >
-                            Log in!
-                        </Button>
+                        <Grid container alignItems='center' className={classes.button_and_link_container}>
+                            <Grid item xs={6}>
+                                <Link to={'/create_account'}>
+                                    <Typography variant='title'>Create Account!</Typography>
+                                </Link>
+                            </Grid>
+
+                            <Grid item xs={6}>
+                                <Button 
+                                    variant='raised' 
+                                    color='primary' 
+                                    className={classes.form_button}
+                                    type='submit'
+                                >
+                                    Log in!
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </form>
                 </Paper>
             </Fragment>
@@ -88,7 +107,13 @@ class LogInForm extends Component {
     }
 }
 
-LogInForm = connect(null, { logInToAccount }) (LogInForm);
+function mapStateToProps(state) {
+    return {
+        postLogInResult: state.postLogInResult
+    }
+}
+
+LogInForm = connect(mapStateToProps, { logInToAccount, clearPostLogInResult }) (LogInForm);
 
 export default withStyles (LoginStyle) (reduxForm ({
     validate,

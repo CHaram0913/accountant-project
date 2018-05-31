@@ -2,13 +2,22 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import { Paper, Modal, Button } from 'material-ui';
+import history from './../../services/history';
 
-import { handleModal } from './../../actions';
+import { checkLogInState, handleModal } from './../../actions';
 
 import RecordModal from './add_record_form_modal';
 import { ModalButtonStyle } from './../../styles';
 
 class ModalButton extends Component {
+    async componentWillMount() {
+        await this.props.checkLogInState();
+
+        if (!this.props.logInState.isLoggedIn) {
+            history.push('/login')
+        }
+    }
+
     componentDidMount() {
         this.props.handleModal(false);
     }
@@ -44,8 +53,12 @@ class ModalButton extends Component {
 
 function mapStateToProps(state) {
     return {
+        logInState: state.logInState,
         modalOpen: state.modalOpen
     }
 }
 
-export default withStyles (ModalButtonStyle) (connect(mapStateToProps, { handleModal }) (ModalButton));
+export default withStyles (ModalButtonStyle) (connect(mapStateToProps, { 
+    checkLogInState, 
+    handleModal
+}) (ModalButton));

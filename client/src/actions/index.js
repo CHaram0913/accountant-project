@@ -6,7 +6,9 @@ import { intervalArray } from './../resources';
 export function createAccount(form) {
     let accountDetail = {
         email: form.email,
-        password: form.password
+        password: form.password,
+        firstName: form.firstName,
+        lastName: form.lastName
     }
 
     return async dispatch => {
@@ -15,6 +17,15 @@ export function createAccount(form) {
         dispatch({
             type : TYPES.CREATE_ACCOUNT,
             payload : response.data
+        });
+    };
+}
+
+export function clearPostAccountResult() {
+    return dispatch => {
+        dispatch({
+            type: TYPES.CLEAR_POST_ACCOUNT_RESULT, 
+            payload: {}
         });
     };
 }
@@ -30,6 +41,26 @@ export function logInToAccount(form) {
 
         dispatch({
             type : TYPES.LOG_IN,
+            payload : response.data
+        });
+    };
+}
+
+export function clearPostLogInResult() {
+    return dispatch => {
+        dispatch({
+            type: TYPES.CLEAR_POST_LOG_IN_RESULT, 
+            payload: {}
+        });
+    };
+}
+
+export function checkLogInState() {
+    return async dispatch => {
+        let response = await axios.get('/api/user');
+        
+        dispatch({
+            type : TYPES.CHECK_LOG_IN_STATE,
             payload : response.data
         });
     };
@@ -81,10 +112,10 @@ export function addTransactionRecord(form) {
     };
 }
 
-export function clearPostResult() {
+export function clearPostRecordResult() {
     return dispatch => {
         dispatch({
-            type: TYPES.CLEAR_POST_RESULT, 
+            type: TYPES.CLEAR_POST_RECORD_RESULT, 
             payload: {}
         });
     };

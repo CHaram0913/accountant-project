@@ -13,19 +13,26 @@ module.exports = app => {
         try {
             let newUser = new User ({
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName
             });
 
             let result = await newUser.save();
     
             if (!result) {
-                throw new Error('invalid email or password');
+                throw new Error('invalid email or password less than 6 characters');
             } else {
-                res.send('success')
-                //res.redirect('/user/login');
+                res.json({ 
+                    accountCreated : true,
+                    message: '' 
+                })
             }
         } catch (e) {
-            res.send(e.message);
+            res.json({ 
+                accountCreated : false,
+                message: e.message 
+            })
         }
     });
 
@@ -60,12 +67,25 @@ module.exports = app => {
         })(req, res, next);
     };
 
+    app.get('/api/user', (req, res) => {
+        if (req.session.passport) {
+            res.json({ isLoggedIn: true });
+        } else {
+            res.json({ isLoggedIn: false });
+        }
+    })
+
     app.post('/api/user/login', logInMiddleware, (req, res) => {
         if (req.body.user) {
-            res.send('success')
-            //res.redirect('/');
+            res.json({ 
+                accountLoggedIn : true,
+                message: '' 
+            });
         } else {
-            res.send(req.body.error);
+            res.json({ 
+                accountLoggedIn : false,
+                message: req.body.error
+            });
         }
     });
 

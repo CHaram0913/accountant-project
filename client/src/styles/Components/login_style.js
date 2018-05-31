@@ -14,8 +14,10 @@ export default
     text_field: {
         margin: '0, 20px'
     },
+    button_and_link_container: {
+        marginTop: '40px'
+    },
     form_button: {
-        marginTop: '50px',
-        marginLeft: '330px'
+        marginLeft: '115px'
     }
 };

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { SignUpForm } from './../../components';
+import { SignUpForm } from './../../containers';
 
 import { withStyles } from 'material-ui/styles';
 

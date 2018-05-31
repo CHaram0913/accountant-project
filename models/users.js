@@ -20,6 +20,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Account email required.'],
         minlength: [6, 'At least 6 characters required.'],
+    },
+    firstName: {
+        type: String,
+        required: [true, 'First name required.']
+    },
+    lastName: {
+        type: String
     }
 });
 

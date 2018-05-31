@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui/styles';
 import { Paper, Typography, TextField, Checkbox, Select, MenuItem, Grid, Button } from 'material-ui';
 
-import { addTransactionRecord, handleModal, clearPostResult } from './../../actions';
+import { addTransactionRecord, handleModal, clearPostRecordResult } from './../../actions';
 
 import { AutoSuggestComponent } from './../../components';
 import { RecordFormModalStyle } from './../../styles';
@@ -136,9 +136,9 @@ class RecordModal extends Component {
     async onSubmit(values) {
         await this.props.addTransactionRecord(values);
 
-        if (this.props.postResult === 'Succesful') {
+        if (this.props.postRecordResult === 'Succesful') {
             this.props.handleModal(false);
-            this.props.clearPostResult();
+            this.props.clearPostRecordResult();
         }
     }
 
@@ -240,14 +240,14 @@ class RecordModal extends Component {
 
 function mapStateToProps(state) {
     return {
-        postResult: state.postResult
+        postRecordResult: state.postRecordResult
     }
 }
 
 RecordModal = connect(mapStateToProps, { 
     addTransactionRecord,
     handleModal,
-    clearPostResult
+    clearPostRecordResult
 }) (RecordModal);
 
 export default withStyles (RecordFormModalStyle) (reduxForm ({
