@@ -1,0 +1,1 @@
+export default ['Rainy Day', 'Daily', 'Weekly', 'Monthly', 'Yearly'];

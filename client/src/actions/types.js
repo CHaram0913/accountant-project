@@ -6,3 +6,4 @@ export const CLEAR_POST_LOG_IN_RESULT = 'clear_post_log_in_result';
 export const CHECK_LOG_IN_STATE = 'check_log_in_state';
 export const POST_TRANSACTION = 'post_transaction';
 export const CLEAR_POST_RECORD_RESULT = 'clear_post_record_result';
+export const GET_RECORD_DATA = 'get_record_data';

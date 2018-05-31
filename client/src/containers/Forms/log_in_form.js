@@ -103,7 +103,7 @@ class LogInForm extends Component {
                     </form>
                 </Paper>
             </Fragment>
-        )
+        );
     }
 }
 

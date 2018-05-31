@@ -5,6 +5,7 @@ import postAccountResultReducer from './reducer_create_account';
 import postLogInResultReducer from './reducer_log_in';
 import checkLogInState from './reducer_log_in_state';
 import postRecordResultReducer from './reducer_post_record';
+import tableDataReducer from './reducer_table_data';
 
 export default combineReducers ({ 
     modalOpen: modalReducer,
@@ -12,5 +13,6 @@ export default combineReducers ({
     postLogInResult: postLogInResultReducer,
     logInState: checkLogInState,
     postRecordResult: postRecordResultReducer,
-    form: formReducer
+    form: formReducer,
+    tableData: tableDataReducer
 });

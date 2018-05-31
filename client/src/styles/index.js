@@ -1,14 +1,34 @@
-import LoginStyle from './Components/login_style';
-import SignUpStyle from './Components/sign_up_style';
-import AutoSuggestStyle from './Components/auto_suggest_style';
+/*
+*   Components Style
+*/
+import AutoSuggestStyle from './components/auto_suggest_style';
+import RecordTableHeadStyle from './components/record_table_head_style';
+import RecordTableToolbarStyle from './components/record_table_toolbar_style';
 
-import RecordFormModalStyle from './Containers/record_form_modal_style';
-import ModalButtonStyle from './Containers/modal_button_style';
+/*
+*   Containers Style
+*/
+import LoginStyle from './containers/login_style';
+import SignUpStyle from './containers/sign_up_style';
+import RecordFormModalStyle from './containers/record_form_modal_style';
+import ModalButtonStyle from './containers/modal_button_style';
+import CategorySideBarStyle from './containers/category_sidebar_style';
+import RecordTableStyle from './containers/record_table_style';
+
+/*
+*   Routes Style
+*/
+import RootRouteStyle from './routes/root_style';
 
 export {
+    AutoSuggestStyle,
+    RecordTableHeadStyle,
+    RecordTableToolbarStyle,
     LoginStyle,
     SignUpStyle,
     RecordFormModalStyle,
-    AutoSuggestStyle,
-    ModalButtonStyle
+    ModalButtonStyle,
+    CategorySideBarStyle,
+    RecordTableStyle,
+    RootRouteStyle
 }

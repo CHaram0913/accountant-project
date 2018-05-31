@@ -120,3 +120,14 @@ export function clearPostRecordResult() {
         });
     };
 }
+
+export function receiveRecordData() {
+    return async dispatch => {
+        let response = await axios.get('/api/record');
+        
+        dispatch({
+            type : TYPES.GET_RECORD_DATA,
+            payload : response.data
+        });
+    };
+}

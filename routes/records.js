@@ -25,4 +25,32 @@ module.exports = app => {
             res.status(400).send(e);
         }
     });
+
+    app.get('/api/record', async (req, res) => {
+        try {
+            let data = await Record.aggregate([
+                {
+                    $match : { 'account' : req.session.passport.user }
+                },
+                {
+                    $sort : { recordTime : -1 }
+                },
+                {
+                    $project : {
+                        date : { $dateToString: { format: "%Y-%m-%d", date: "$recordTime" } },
+                        category: '$category.category',
+                        subCategory: '$category.subCategory',
+                        amount: '$amount',
+                        payee: '$detail.payee',
+                        memo: '$detail.memo'
+                    }
+                }
+            ]);
+            
+            res.json({ success: true, data });
+        } catch (e) {
+            
+            res.json({ success: false, data: e.message });
+        }
+    })
 }
