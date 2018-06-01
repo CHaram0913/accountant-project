@@ -6,6 +6,7 @@ import ModalButton from './Modals/modal_button';
 
 import CategorySideBar from './Sidebars/category_side_bar';
 
+
 import RecordTable from './Tables/record_table';
 
 export {

@@ -4,6 +4,9 @@ import history from '../services/history';
 import { mainRoutes } from '../routes';
 import Reboot from 'material-ui/Reboot';
 
+import { DragDropContextProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+
 const mainSwitch = (
     <Switch>
         {mainRoutes.map(function (item, index) {
@@ -24,12 +27,14 @@ const mainSwitch = (
 export default class App extends Component {
     render() {
         return (
-            <Fragment>
-                <Reboot />
-                <Router history={history}>
-                    { mainSwitch }
-                </Router>
-            </Fragment>
+            <DragDropContextProvider backend={HTML5Backend}>
+                <Fragment>         
+                    <Reboot />
+                    <Router history={history}>
+                        { mainSwitch }
+                    </Router>
+                </Fragment>
+            </DragDropContextProvider>
         );
     }
 }

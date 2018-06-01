@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 import * as TYPES from './types';
 import { intervalArray } from './../resources';
@@ -23,6 +24,7 @@ export function createAccount(form) {
 
 export function clearPostAccountResult() {
     return dispatch => {
+
         dispatch({
             type: TYPES.CLEAR_POST_ACCOUNT_RESULT, 
             payload: {}
@@ -48,6 +50,7 @@ export function logInToAccount(form) {
 
 export function clearPostLogInResult() {
     return dispatch => {
+
         dispatch({
             type: TYPES.CLEAR_POST_LOG_IN_RESULT, 
             payload: {}
@@ -72,6 +75,17 @@ export function handleModal(modal_state) {
         dispatch({
             type: TYPES.UPDATE_MODAL, 
             payload: modal_state
+        });
+    };
+}
+
+export function getSuggestions() {
+    return async dispatch => {
+        let response = await axios.get('/api/record/suggestions');
+        
+        dispatch({
+            type : TYPES.GET_SUGGESTIONS,
+            payload : response.data
         });
     };
 }
@@ -114,6 +128,7 @@ export function addTransactionRecord(form) {
 
 export function clearPostRecordResult() {
     return dispatch => {
+        
         dispatch({
             type: TYPES.CLEAR_POST_RECORD_RESULT, 
             payload: {}
@@ -128,6 +143,34 @@ export function receiveRecordData() {
         dispatch({
             type : TYPES.GET_RECORD_DATA,
             payload : response.data
+        });
+    };
+}
+
+export function receiveSideBarData() {
+    return async dispatch => {
+        let response = await axios.get('/api/record/categories');
+        
+        dispatch({
+            type : TYPES.GET_SIDE_BAR_DATA,
+            payload : response.data
+        });
+    };
+}
+
+export function initializeRecordForm(dropResult) {
+    let record_template = {
+        date: moment().tz('Asia/Seoul').format('YYYY-MM-DD'),
+        category: intervalArray.findIndex(i => i === dropResult.interval),
+        subCategory: dropResult.category,
+        income: false,
+        amount: dropResult.average
+    }
+
+    return dispatch => {
+        dispatch({
+            type: TYPES.INITIALIZE_RECORD_FORM, 
+            payload: record_template
         });
     };
 }

@@ -71,12 +71,10 @@ class RecordTable extends Component {
         const { classes } = this.props;
 
         return(
-            <Fragment>
-                <Paper>
-                    <RecordTableToolbar />
-                    {this.renderTable(this.props.tableData)}
-                </Paper>
-            </Fragment>
+            <Paper className={classes.root}>
+                <RecordTableToolbar />
+                {this.renderTable(this.props.tableData)}
+            </Paper>
         )
     }
 }

@@ -1,13 +1,11 @@
 import React, { Component, Fragment } from 'react';
 
-import { DragDropContextProvider } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
-
 import { withStyles } from 'material-ui/styles';
 import { Paper, Grid, Typography } from 'material-ui';
 import { RootRouteStyle } from './../../styles';
 
-import { ModalButton, CategorySideBar, RecordTable } from './../../containers';
+import { TargetTableContainer } from './../../components';
+import { ModalButton, CategorySideBar } from './../../containers';
 
 class Root extends Component {
 
@@ -24,14 +22,7 @@ class Root extends Component {
                     </Grid>
 
                     <Grid item xs={9} zeroMinWidth>
-                        <DragDropContextProvider backend={HTML5Backend}>
-                            <Paper className={classes.dnd_container_paper}>
-                                <Typography variant='display2'>
-                                    This is DND Container
-                                </Typography>
-                                <RecordTable />
-                            </Paper>
-                        </DragDropContextProvider>
+                        <TargetTableContainer />
                     </Grid>
                 </Grid>
             </Fragment>

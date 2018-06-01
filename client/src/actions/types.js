@@ -7,3 +7,6 @@ export const CHECK_LOG_IN_STATE = 'check_log_in_state';
 export const POST_TRANSACTION = 'post_transaction';
 export const CLEAR_POST_RECORD_RESULT = 'clear_post_record_result';
 export const GET_RECORD_DATA = 'get_record_data';
+export const GET_SIDE_BAR_DATA = 'get_side_bar_data';
+export const GET_SUGGESTIONS = 'get_suggestions';
+export const INITIALIZE_RECORD_FORM = 'initialize_record_form';

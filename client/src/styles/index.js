@@ -4,6 +4,8 @@
 import AutoSuggestStyle from './components/auto_suggest_style';
 import RecordTableHeadStyle from './components/record_table_head_style';
 import RecordTableToolbarStyle from './components/record_table_toolbar_style';
+import CategoryDragSourceStyle from './components/category_drag_source_style';
+import RecordTableDropTargetStyle from './components/record_table_drop_target_style';
 
 /*
 *   Containers Style
@@ -24,6 +26,8 @@ export {
     AutoSuggestStyle,
     RecordTableHeadStyle,
     RecordTableToolbarStyle,
+    CategoryDragSourceStyle,
+    RecordTableDropTargetStyle,
     LoginStyle,
     SignUpStyle,
     RecordFormModalStyle,

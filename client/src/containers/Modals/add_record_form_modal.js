@@ -1,31 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import _ from 'lodash';
+
 import { withStyles } from 'material-ui/styles';
 import { Paper, Typography, TextField, Checkbox, Select, MenuItem, Grid, Button } from 'material-ui';
 
-import { addTransactionRecord, handleModal, clearPostRecordResult } from './../../actions';
+import { addTransactionRecord, handleModal, clearPostRecordResult, getSuggestions } from './../../actions';
 
 import { AutoSuggestComponent } from './../../components';
 import { RecordFormModalStyle } from './../../styles';
 
 import { intervalArray, normalizeCalendar } from './../../resources';
-
-const subCategorySuggestions = [
-    { label: 'Food' },
-    { label: 'Food2' },
-    { label: 'Food3' },
-    { label: 'Food4' },
-    { label: 'Food5' }
-];
-
-const payeeSuggestions = [
-    { label: 'Restaurant' },
-    { label: 'Landlord' },
-    { label: 'Mom' },
-    { label: 'Landlord2' },
-    { label: 'Landlord3' }
-];
 
 const validate = values => {
     const errors = {};
@@ -51,6 +37,11 @@ class RecordModal extends Component {
         super(props);
 
         this.closeModal = this.closeModal.bind(this);
+        this.renderSuggestions = this.renderSuggestions.bind(this);
+    }
+
+    async componentWillMount() {
+        await this.props.getSuggestions();
     }
     
     renderCalenderField(field) {
@@ -146,8 +137,19 @@ class RecordModal extends Component {
         this.props.handleModal(false);
     }
 
+    renderSuggestions(suggestions) {
+        if (!_.isEmpty(suggestions) && suggestions.success) {
+            return suggestions.data;
+        } else {
+            return {
+                category: [{ label: 'Default' }],
+                payee: [{ label: 'Default' }]
+            };
+        }
+    }
+
     render() {
-        const { classes, handleSubmit } = this.props;
+        const { classes, handleSubmit, suggestions } = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -170,7 +172,7 @@ class RecordModal extends Component {
                         label='Category'
                         name='subCategory'
                         component={AutoSuggestComponent}
-                        suggestions={subCategorySuggestions}
+                        suggestions={this.renderSuggestions(this.props.suggestions).category}
                     />
                     <Grid container justify='space-between' alignItems='center' className={classes.checkbox_container} zeroMinWidth>
                         <Grid item xs={4} zeroMinWidth>
@@ -201,7 +203,7 @@ class RecordModal extends Component {
                         label='Payee'
                         name='payee'
                         component={AutoSuggestComponent}
-                        suggestions={payeeSuggestions}
+                        suggestions={this.renderSuggestions(this.props.suggestions).payee}
                     />
                     <Field
                         label='Memo'
@@ -240,17 +242,20 @@ class RecordModal extends Component {
 
 function mapStateToProps(state) {
     return {
-        postRecordResult: state.postRecordResult
+        suggestions: state.suggestions,
+        postRecordResult: state.postRecordResult,
+        initialValues: state.initialForm
     }
 }
 
-RecordModal = connect(mapStateToProps, { 
-    addTransactionRecord,
-    handleModal,
-    clearPostRecordResult
-}) (RecordModal);
-
-export default withStyles (RecordFormModalStyle) (reduxForm ({
+RecordModal = reduxForm ({
     validate,
     form: 'NewRecordForm'
+}) (RecordModal);
+
+export default withStyles (RecordFormModalStyle) (connect(mapStateToProps, {
+    addTransactionRecord,
+    handleModal,
+    clearPostRecordResult,
+    getSuggestions
 }) (RecordModal)) ;
