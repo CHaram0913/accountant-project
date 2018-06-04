@@ -10,3 +10,6 @@ export const GET_RECORD_DATA = 'get_record_data';
 export const GET_SIDE_BAR_DATA = 'get_side_bar_data';
 export const GET_SUGGESTIONS = 'get_suggestions';
 export const INITIALIZE_RECORD_FORM = 'initialize_record_form';
+export const CREATE_CSV = 'create_csv';
+export const CREATE_EXCEL = 'create_excel';
+export const UPLOAD_FILE = 'upload_file';

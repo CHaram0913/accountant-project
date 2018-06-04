@@ -174,3 +174,41 @@ export function initializeRecordForm(dropResult) {
         });
     };
 }
+
+export function createCsv(record_data) {
+    return async dispatch => {
+        let response = await axios.post('/api/record/csv', record_data);
+        
+        dispatch({
+            type : TYPES.CREATE_CSV,
+            payload : response.data
+        });
+    };
+}
+
+export function createExcel(record_data) {
+    return async dispatch => {
+        let response = await axios.post('/api/record/excel', record_data);
+        
+        dispatch({
+            type : TYPES.CREATE_EXCEL,
+            payload : response.data
+        });
+    };
+}
+
+export function uploadFile(file) {
+    let data = new FormData();
+    data.append('file', file.files[0]);
+
+    return async dispatch => {
+        let response = await axios.post('/api/record/upload', data, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        
+        dispatch({
+            type : TYPES.UPLOAD_FILE,
+            payload : response.data
+        });
+    };
+}

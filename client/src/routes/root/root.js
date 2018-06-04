@@ -11,6 +11,7 @@ class Root extends Component {
 
     render() {
         const { classes } = this.props;
+
         return (
             <Fragment>
                 <Grid container className={classes.root} zeroMinWidth>

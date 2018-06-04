@@ -9,6 +9,9 @@ import tableDataReducer from './reducer_table_data';
 import sideBarDataReducer from './reducer_side_bar_data';
 import suggestionsReducer from './reducer_suggestions';
 import initialFormReducer from './reducer_record_form_initial';
+import recordCSVReducer from './reducer_create_record_csv';
+import recordExcelReducer from './reducer_create_record_excel';
+import uploadFileReducer from './reducer_upload_file';
 
 export default combineReducers ({ 
     modalOpen: modalReducer,
@@ -20,5 +23,8 @@ export default combineReducers ({
     tableData: tableDataReducer,
     sideBarData: sideBarDataReducer,
     suggestions: suggestionsReducer,
-    initialForm: initialFormReducer
+    initialForm: initialFormReducer,
+    csvFile: recordCSVReducer,
+    excelFile: recordExcelReducer,
+    uploadFile: uploadFileReducer
 });

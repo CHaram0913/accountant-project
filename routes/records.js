@@ -1,4 +1,17 @@
 const Record = require('./../models/records');
+const fs = require('fs');
+const path = require('path');
+const XLSX = require('xlsx');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: './temp/',
+    filename: (req, file, callback) => {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+
+const upload = multer({ storage }).single('file');
 
 const getMode = (categories) => {
     let max_frequency = 1;
@@ -157,7 +170,7 @@ module.exports = app => {
                     $project : {
                         interval: '$category',
                         latest_transaction : { $dateToString: { format: "%Y-%m-%d", date: "$latest_transaction" } },
-                        average_spending : { $multiply : [{ $trunc: { $divide: [ "$average_amount", -1000 ] } }, 1000] },
+                        average_spending : { $multiply : [{ $trunc: { $divide: [ "$average_amount", -100 ] } }, 100] },
                         latest_payee : '$latest_payee',
                         count : '$count'
                     }
@@ -177,4 +190,108 @@ module.exports = app => {
         }
     });
 
+    app.post('/api/record/csv', async (req, res) => {
+        let file_name = 'my_record.csv';
+        let file_path = './';
+
+        try {
+            let csv_file = 'Date,Interval,Category,Income?,Notification?,Amount,Payee,Memo\r\n';
+
+            for (let i = 0; i < req.body.length; i++){
+                let row = '';
+
+                for (let key in req.body[i]) {
+                    if (key !== '_id' && key !== 'subCategory') {
+                        if (row !== '') {
+                            row += ','
+                        }
+                        row += req.body[i][key];
+                    } else if (key === 'subCategory') {
+                        row += `,${req.body[i][key]}`;
+                        if (req.body[i].amount < 0) {
+                            row += ',false';
+                        } else {
+                            row += ',true';
+                        }
+                        row += ',false';
+                    }
+                }
+                row += '\r\n';
+
+                csv_file += row;
+            }
+
+            fs.writeFile(`${file_path}${file_name}`, csv_file, 'utf8', (e) => {
+                if (e) {
+                    res.json({ success: false, data: e.message });
+                } else {
+                    res.json({ success: true, data: '' });
+                }
+            })
+        } catch(e) {
+
+            res.json({ success: false, data: e.message });
+        }
+    });
+
+    app.post('/api/record/excel', async (req, res) => {
+        let file_name = 'my_record.xlsx';
+
+        try {
+            let formatted_json = [];
+
+            for (let i = 0; i < req.body.length; i++) {
+                let notification = false;
+                let income = req.body[i].amount > 0 ? true : false;
+                let memo = req.body[i].memo ? req.body[i].memo : '';
+
+                let formatted_data_row = {
+                    'Date': req.body[i].date,
+                    'Interval': req.body[i].category,
+                    'Category': req.body[i].subCategory,
+                    'Income?': income,
+                    'Notification?': notification,
+                    'Amount': req.body[i].amount,
+                    'Payee': req.body[i].payee,
+                    'Memo': memo 
+                }
+                formatted_json.push(formatted_data_row);
+            }
+
+            let worksheet = XLSX.utils.json_to_sheet(formatted_json, { 
+                header: ['Date', 'Interval', 'Category', 'Income?', 'Notification?', 'Amount', 'Payee', 'Memo'] 
+            });
+
+            const workbook = { SheetNames: [], Sheets: {}, Props: {} }
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+            XLSX.writeFile(workbook, file_name);
+
+            res.json({ success: true, data: '' });
+
+        } catch(e) {
+
+            res.json({ success: false, data: e.message });
+        }
+    });
+
+    app.post('/api/record/upload', async (req, res) => {
+        console.log('req recieved');
+        try {
+            upload(req, res, (e) => {
+                console.log('upload function called')
+                if(e) {
+                    console.log(e);
+                    res.json({ success: false, data: e.message });
+                } else {
+                    console.log('req');
+                    console.log(req.file);
+                    res.json({ success: true, data: '' });
+                }
+            })
+
+        } catch(e) {
+
+            res.json({ success: false, data: e.message });
+        }
+    });
 }

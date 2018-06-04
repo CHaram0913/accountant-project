@@ -16,6 +16,7 @@ import RecordFormModalStyle from './containers/record_form_modal_style';
 import ModalButtonStyle from './containers/modal_button_style';
 import CategorySideBarStyle from './containers/category_sidebar_style';
 import RecordTableStyle from './containers/record_table_style';
+import DownloadButtonStyle from './containers/download_record_button_style';
 
 /*
 *   Routes Style
@@ -34,5 +35,6 @@ export {
     ModalButtonStyle,
     CategorySideBarStyle,
     RecordTableStyle,
+    DownloadButtonStyle,
     RootRouteStyle
 }
