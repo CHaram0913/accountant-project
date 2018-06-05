@@ -1,5 +1,7 @@
 export default theme => ({
     root: {
-        backgroundColor: 'inherit'
+        backgroundColor: 'inherit',
+        height: 'auto',
+        width: 'auto'
     }
 });

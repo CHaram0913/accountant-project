@@ -8,7 +8,6 @@ import { TargetTableContainer } from './../../components';
 import { ModalButton, CategorySideBar } from './../../containers';
 
 class Root extends Component {
-
     render() {
         const { classes } = this.props;
 

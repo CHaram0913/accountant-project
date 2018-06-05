@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
+import path from 'path';
 
 import * as TYPES from './types';
 import { intervalArray } from './../resources';
@@ -198,16 +199,53 @@ export function createExcel(record_data) {
 }
 
 export function uploadFile(file) {
-    let data = new FormData();
-    data.append('file', file.files[0]);
+    let fileType = path.extname(file.files[0].name);
 
+    if (fileType === '.csv' || fileType === '.xlsx') {
+        let data = new FormData();
+        data.append('file', file.files[0]);
+
+        return async dispatch => {
+            let response = await axios.post('/api/record/upload', data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            
+            dispatch({
+                type : TYPES.UPLOAD_FILE,
+                payload : response.data
+            });
+        };
+
+    } else {
+        return dispatch => {
+            dispatch({
+                type: TYPES.UPLOAD_FILE, 
+                payload: {
+                    success: false,
+                    data: 'Only .csv and .xlsx file can be uploaded.'
+                }
+            });
+        };
+    }
+}
+
+export function readUploadedFile(file_data) {
     return async dispatch => {
-        let response = await axios.post('/api/record/upload', data, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        let response = await axios.post('/api/record/read_file', file_data);
         
         dispatch({
-            type : TYPES.UPLOAD_FILE,
+            type : TYPES.READ_UPLOADED_FILE,
+            payload : response.data
+        });
+    };
+}
+
+export function deleteSelectedRecords(selected_records_ids) {
+    return async dispatch => {
+        let response = await axios.post('/api/record/delete_selected', selected_records_ids);
+        
+        dispatch({
+            type : TYPES.DELETE_SELECTED_RECORDS,
             payload : response.data
         });
     };

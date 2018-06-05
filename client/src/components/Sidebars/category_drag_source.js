@@ -30,23 +30,20 @@ class CategoryBlock extends Component {
         return connectDragSource(
             <div style={{ opacity: isDragging ? 0.5 : 1 }} className={classes.root}>
                 <Paper className={classes.category_block}>
-                    <Typography variant='title'>
-                        Category: {record._id}
+                    <Typography variant='title' className={classes.category_block_text_title}>
+                        <b>{record._id}</b>
                     </Typography>
-                    <Typography variant='subhead'>
-                        Interval: {record.interval}
+                    <Typography variant='subheading' className={classes.category_block_text}>
+                        Interval: <b>{record.interval}</b>
                     </Typography>
-                    <Typography variant='subhead'>
-                        Latest Record: {record.latest_transaction}
+                    <Typography variant='subheading' className={classes.category_block_text}>
+                        Latest Record: <b>{record.latest_transaction}</b>
                     </Typography>
-                    <Typography variant='subhead'>
-                        Latest Payee: {record.latest_payee}
+                    <Typography variant='subheading' className={classes.category_block_text}>
+                        Average Spending: <b>{record.average_spending}</b>
                     </Typography>
-                    <Typography variant='subhead'>
-                        Average Spending: {record.average_spending}
-                    </Typography>
-                    <Typography variant='subhead'>
-                        Frequency: {record.count}
+                    <Typography variant='subheading' className={classes.category_block_text}>
+                        Frequency: <b>{record.count}</b>
                     </Typography>
                 </Paper>
             </div>

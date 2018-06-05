@@ -10,7 +10,7 @@ import { CategoryBlock } from './../../components';
 
 import { receiveSideBarData } from './../../actions';
 
-const lengthCut = (recordArray) => (recordArray.length > 7 ? 7 : recordArray.length)
+const lengthCut = (recordArray) => (recordArray.length > 5 ? 5 : recordArray.length)
 
 class CategorySideBar extends Component {
     async componentWillMount() {
@@ -20,7 +20,11 @@ class CategorySideBar extends Component {
     async componentDidUpdate(prevProps) {
         if (prevProps.postRecordResult !== this.props.postRecordResult && this.props.postRecordResult === 'Succesful') {
             await this.props.receiveSideBarData();
-        } else {}
+        } else if (prevProps.readUploadedFileResult !== this.props.readUploadedFileResult && this.props.readUploadedFileResult.success) {
+            await this.props.receiveSideBarData();
+        } else if (prevProps.deleteRecords !== this.props.deleteRecords && this.props.deleteRecords.success) {
+            await this.props.receiveSideBarData();
+        }
     }
 
     renderSideBar(recordState) {
@@ -61,7 +65,9 @@ class CategorySideBar extends Component {
 function mapStateToProps(state) {
     return {
         sideBarData: state.sideBarData,
-        postRecordResult: state.postRecordResult
+        postRecordResult: state.postRecordResult,
+        readUploadedFileResult: state.readUploadedFile,
+        deleteRecords: state.deleteRecords
     }
 }
 

@@ -35,8 +35,8 @@ class ModalButton extends Component {
 
         return(
             <Fragment>
-                <Button onClick={this.openModal} variant='raised' color='primary'>
-                    Add Record
+                <Button onClick={this.openModal} variant='raised' color='primary' className={classes.root}>
+                    Add Record Manually
                 </Button>
                 <Modal
                     open={this.props.modalOpen}

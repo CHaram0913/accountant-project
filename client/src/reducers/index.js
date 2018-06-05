@@ -12,6 +12,8 @@ import initialFormReducer from './reducer_record_form_initial';
 import recordCSVReducer from './reducer_create_record_csv';
 import recordExcelReducer from './reducer_create_record_excel';
 import uploadFileReducer from './reducer_upload_file';
+import readUploadedFileReducer from './reducer_read_uploaded_file';
+import deleteRecordsReducer from './reducer_delete_selected_records';
 
 export default combineReducers ({ 
     modalOpen: modalReducer,
@@ -26,5 +28,7 @@ export default combineReducers ({
     initialForm: initialFormReducer,
     csvFile: recordCSVReducer,
     excelFile: recordExcelReducer,
-    uploadFile: uploadFileReducer
+    uploadFile: uploadFileReducer,
+    readUploadedFile: readUploadedFileReducer,
+    deleteRecords: deleteRecordsReducer
 });

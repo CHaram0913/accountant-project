@@ -7,7 +7,7 @@ import { withStyles } from 'material-ui/styles';
 import { Paper, Typography } from 'material-ui';
 import { RecordTableDropTargetStyle } from './../../styles';
 
-import { RecordTable, DownloadButton } from './../../containers';
+import { RecordTable } from './../../containers';
 
 import { handleModal, initializeRecordForm, uploadFile } from './../../actions';
 
@@ -50,9 +50,6 @@ class TargetTableContainer extends Component {
             <div style={{ opacity: isActive ? 0.8 : 1 }} className={classes.root}>
                 {this.handleDrop(didDrop, getDropResult)}
                 <Paper style={{ backgroundColor: isActive ? '#E6FFF4' : '' }} className={classes.target_container_paper}>
-                    <Typography variant='display2'>
-                        <span>This is DND Container</span> <DownloadButton />
-                    </Typography>
                     <RecordTable
                         isActive={isOver && canDrop}
                     />

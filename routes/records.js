@@ -7,31 +7,34 @@ const multer = require('multer');
 const storage = multer.diskStorage({
     destination: './temp/',
     filename: (req, file, callback) => {
-        callback(null, Date.now() + file.originalname);
+        callback(null, Date.now() + '_' + req.session.passport.user + '_' + file.originalname);
     }
 });
 
 const upload = multer({ storage }).single('file');
 
 const getMode = (categories) => {
-    let max_frequency = 1;
-    let counter = 0;
-    let mode;
+    if (categories.length = 1) {
+        return categories[0];
+    } else {
+        let max_frequency = 1;
+        let counter = 0;
+        let mode;
 
-    for (let i = 0; i < categories.length; i++) {
-        for (let j = i; j < categories.length; j++) {
-            if (categories[i] === categories[j]) {
-                counter++;
+        for (let i = 0; i < categories.length; i++) {
+            for (let j = i; j < categories.length; j++) {
+                if (categories[i] === categories[j]) {
+                    counter++;
+                }
+                if (max_frequency < counter) {
+                    max_frequency = counter;
+                    mode = categories[i];
+                }
             }
-            if (max_frequency < counter) {
-                max_frequency = counter;
-                mode = categories[i];
-            }
+            counter = 0;
         }
-        counter = 0;
+        return mode;
     }
-
-    return mode;
 }
 
 module.exports = app => {
@@ -275,20 +278,118 @@ module.exports = app => {
     });
 
     app.post('/api/record/upload', async (req, res) => {
-        console.log('req recieved');
         try {
             upload(req, res, (e) => {
-                console.log('upload function called')
                 if(e) {
-                    console.log(e);
                     res.json({ success: false, data: e.message });
                 } else {
-                    console.log('req');
-                    console.log(req.file);
-                    res.json({ success: true, data: '' });
+                    let type = path.extname(req.file.filename);
+
+                    res.json({ 
+                        success: true, 
+                        data: {
+                            filename: req.file.filename,
+                            type
+                        }
+                    });
                 }
             })
 
+        } catch(e) {
+
+            res.json({ success: false, data: e.message });
+        }
+    });
+
+    app.post('/api/record/read_file', async (req, res) => {
+        try {
+            if (req.body.type === '.csv') {
+                fs.readFile(`./temp/${req.body.filename}`, async (e, data) => {
+                    if(e) {
+                        res.json({ success: false, data: e.message });
+                    } else {
+                        let csvData = data.toString('utf8');
+                        let csvDataInRows = csvData.split(/\r\n|\n/);
+                        for (let i = 1; i < csvDataInRows.length - 1; i++) {
+                            let csvDataInCells = csvDataInRows[i].split(',');
+
+                            let notification = csvDataInCells[4] === 'true' ? true : false;
+                            let amount = Number(csvDataInCells[5]);
+                            let memo = csvDataInCells[7];
+                            if (csvDataInCells.length > 8) {
+                                for (let j = 8; j < csvDataInCells.length; j++) {
+                                    memo = memo.concat(',');
+                                    memo = memo.concat(csvDataInCells[j]);
+                                }
+                            }
+                            memo = memo !== 'null' ? memo : null;
+
+                            let newRecord = new Record ({
+                                account: req.session.passport.user,
+                                recordTime: csvDataInCells[0],
+                                amount,
+                                category: {
+                                    category: csvDataInCells[1],
+                                    notification,
+                                    subCategory: csvDataInCells[2]
+                                },
+                                detail: {
+                                    payee: csvDataInCells[6],
+                                    memo
+                                }
+                            });
+
+                            await newRecord.save();
+                        }
+                    }
+
+                    res.json({ success: true, data: 'csv' });
+                });
+        
+            } else if (req.body.type === '.xlsx') {
+                let workbook = XLSX.readFile(`./temp/${req.body.filename}`);
+                let worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                let excelData = XLSX.utils.sheet_to_json(worksheet);
+                
+                for (let i = 0; i < excelData.length; i++) {
+                    let amount = Number(excelData[i].Amount);
+                    let notification = excelData[i]['Notification?'] === 'TRUE' ? true : false;
+                    let memo = excelData[i].Memo !== '' ? excelData[i].Memo : null;
+
+                    let newRecord = new Record ({
+                        account: req.session.passport.user,
+                        recordTime: excelData[i].Date,
+                        amount,
+                        category: {
+                            category: excelData[i].Interval,
+                            notification,
+                            subCategory: excelData[i].Category
+                        },
+                        detail: {
+                            payee: excelData[i].Payee,
+                            memo
+                        }
+                    });
+
+                    await newRecord.save();
+                }
+
+                res.json({ success: true, data: 'excel' });
+            } 
+        } catch(e) {
+            res.json({ success: false, data: e.message });
+        }
+    });
+
+    app.post('/api/record/delete_selected', async (req, res) => {
+        try {
+            let deleteResults = [];
+            for (i = 0; i < req.body.length; i++) {
+                let deleteResult = await Record.findByIdAndRemove(req.body[i]);
+                deleteResults.push(deleteResult)
+            }
+
+            res.json({ success: true, data: deleteResults.length });
         } catch(e) {
 
             res.json({ success: false, data: e.message });
