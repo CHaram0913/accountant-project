@@ -137,9 +137,11 @@ export function clearPostRecordResult() {
     };
 }
 
-export function receiveRecordData() {
+export function receiveRecordData(term) {
+    let searchTerm = { term };
+
     return async dispatch => {
-        let response = await axios.get('/api/record');
+        let response = await axios.post('/api/record', searchTerm);
         
         dispatch({
             type : TYPES.GET_RECORD_DATA,
@@ -148,9 +150,11 @@ export function receiveRecordData() {
     };
 }
 
-export function receiveSideBarData() {
+export function receiveSideBarData(term) {
+    let searchTerm = { term };
+
     return async dispatch => {
-        let response = await axios.get('/api/record/categories');
+        let response = await axios.post('/api/record/categories', searchTerm);
         
         dispatch({
             type : TYPES.GET_SIDE_BAR_DATA,
@@ -247,6 +251,24 @@ export function deleteSelectedRecords(selected_records_ids) {
         dispatch({
             type : TYPES.DELETE_SELECTED_RECORDS,
             payload : response.data
+        });
+    };
+}
+
+export function updateCategorySearchTerm(category_text) {
+    return dispatch => {
+        dispatch({
+            type : TYPES.SEARCH_CATEGORY,
+            payload : { term: category_text }
+        });
+    };
+}
+
+export function updateRecordSearchTerm(record_text) {
+    return dispatch => {
+        dispatch({
+            type : TYPES.SEARCH_RECORD,
+            payload : { term: record_text }
         });
     };
 }

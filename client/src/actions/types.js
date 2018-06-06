@@ -15,3 +15,5 @@ export const CREATE_EXCEL = 'create_excel';
 export const UPLOAD_FILE = 'upload_file';
 export const READ_UPLOADED_FILE = 'read_uploaded_file';
 export const DELETE_SELECTED_RECORDS = 'delete_selected_records';
+export const SEARCH_CATEGORY = 'search_category';
+export const SEARCH_RECORD = 'search_record';

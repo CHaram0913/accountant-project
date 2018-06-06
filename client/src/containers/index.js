@@ -7,6 +7,7 @@ import ModalButton from './Modals/modal_button';
 import CategorySideBar from './Sidebars/category_side_bar';
 
 import RecordTable from './Tables/record_table';
+import DownloadButton from './Tables/download_record_button';
 
 export {
     LogInForm,
@@ -14,5 +15,6 @@ export {
     RecordModal,
     ModalButton,
     CategorySideBar,
-    RecordTable
+    RecordTable,
+    DownloadButton
 }

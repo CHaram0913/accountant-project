@@ -9,7 +9,8 @@ node_modules
 
 # note
 practice/
-temp/
+temp/*
+backup/*
 *.csv
 *.xlsx
 

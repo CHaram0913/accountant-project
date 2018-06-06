@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { withStyles } from 'material-ui/styles';
-import { Paper, Grid, Typography, Toolbar, Checkbox, IconButton } from 'material-ui';
-import { Table, TableBody, TableCell, TablePagination, TableRow, TableSortLabel } from 'material-ui';
+import { Paper, Grid, Checkbox } from 'material-ui';
+import { Table, TableBody, TableCell, TablePagination, TableRow } from 'material-ui';
 import { RecordTableStyle } from './../../styles';
 
-import { RecordTableHead, RecordTableToolbar, DownloadButton } from './../../components';
-
+import { RecordTableHead, RecordTableToolbar, RecordSearchBar } from './../../components';
+import { DownloadButton } from './../../containers';
 import { receiveRecordData, readUploadedFile } from './../../actions';
 
 class RecordTable extends Component {
@@ -33,14 +33,14 @@ class RecordTable extends Component {
         }
 
         if (prevProps.postRecordResult !== this.props.postRecordResult && this.props.postRecordResult === 'Succesful') {
-            await this.props.receiveRecordData();
+            await this.props.receiveRecordData(this.props.recordSearchTerm.term);
             this.setState({ data: this.props.tableData.data });
 
         } else if (prevProps.uploadFileResult !== this.props.uploadFileResult && this.props.uploadFileResult.success) {
             await this.props.readUploadedFile(this.props.uploadFileResult.data);
 
         } else if (prevProps.readUploadedFileResult !== this.props.readUploadedFileResult && this.props.readUploadedFileResult.success) {
-            await this.props.receiveRecordData();
+            await this.props.receiveRecordData(this.props.recordSearchTerm.term);
             this.setState({ data: this.props.tableData.data });
 
         } else if (prevProps.uploadFileResult !== this.props.uploadFileResult && !this.props.uploadFileResult.success) {
@@ -48,14 +48,18 @@ class RecordTable extends Component {
 
         } else if (prevProps.deleteRecords !== this.props.deleteRecords && this.props.deleteRecords.success) {
             this.setState({ selected: [] })
-            await this.props.receiveRecordData();
+            await this.props.receiveRecordData(this.props.recordSearchTerm.term);
+            this.setState({ data: this.props.tableData.data });
+
+        } else if (prevProps.recordSearchTerm !== this.props.recordSearchTerm) {
+            await this.props.receiveRecordData(this.props.recordSearchTerm.term);
             this.setState({ data: this.props.tableData.data });
         }
         
     }
 
     async componentWillMount() {
-        await this.props.receiveRecordData();
+        await this.props.receiveRecordData(this.props.recordSearchTerm.term);
         this.setState({ data: this.props.tableData.data });
     }
 
@@ -98,6 +102,12 @@ class RecordTable extends Component {
         }
 
         this.setState({ selected: newSelected });
+    }
+
+    //edit record
+    handleDoubleClick = rowData => e => {
+        console.log('double click');
+        console.log(rowData);
     }
 
     handlePageChange = (e, page) => {
@@ -164,6 +174,7 @@ class RecordTable extends Component {
                                     <TableRow
                                         hover
                                         onClick={this.handleItemClick(row._id)}
+                                        onDoubleClick={this.handleDoubleClick(row)}
                                         role='checkbox'
                                         aria-checked={isSelected}
                                         tabIndex={-1}
@@ -235,7 +246,15 @@ class RecordTable extends Component {
                     onChangePage={this.handlePageChange}
                     onChangeRowsPerPage={this.handleRowsPerPageChange}
                 />
-                <DownloadButton height={height} left={left} top={top} selected={selectedData} />
+                <Grid container zeroMinWidth justify='center' alignItems='center' className={classes.download_button_and_search_bar_container}>
+                    <Grid item xs={5} zeroMinWidth>
+                        <DownloadButton height={height} left={left} top={top} selected={selectedData} />
+                    </Grid>
+                    <Grid item xs={7} zeroMinWidth>
+                        <RecordSearchBar />
+                    </Grid>
+                </Grid>
+                
             </Paper>
         )
     }
@@ -247,7 +266,8 @@ function mapStateToProps(state) {
         postRecordResult: state.postRecordResult,
         uploadFileResult: state.uploadFile,
         readUploadedFileResult: state.readUploadedFile,
-        deleteRecords: state.deleteRecords
+        deleteRecords: state.deleteRecords,
+        recordSearchTerm: state.recordSearchTerm
     }
 }
 

@@ -57,7 +57,7 @@ class RecordTableHead extends Component {
         const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
 
         return(
-            <TableHead>
+            <TableHead className={classes.root}>
                 <TableRow>
                     <TableCell padding='checkbox' >
                         <Checkbox

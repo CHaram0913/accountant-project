@@ -172,7 +172,7 @@ class RecordModal extends Component {
                         label='Category'
                         name='subCategory'
                         component={AutoSuggestComponent}
-                        suggestions={this.renderSuggestions(this.props.suggestions).category}
+                        suggestions={this.renderSuggestions(suggestions).category}
                     />
                     <Grid container justify='space-between' alignItems='center' className={classes.checkbox_container} zeroMinWidth>
                         <Grid item xs={4} zeroMinWidth>
@@ -203,7 +203,7 @@ class RecordModal extends Component {
                         label='Payee'
                         name='payee'
                         component={AutoSuggestComponent}
-                        suggestions={this.renderSuggestions(this.props.suggestions).payee}
+                        suggestions={this.renderSuggestions(suggestions).payee}
                     />
                     <Field
                         label='Memo'

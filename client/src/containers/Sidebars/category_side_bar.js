@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { withStyles } from 'material-ui/styles';
-import { Paper, Grid, Typography } from 'material-ui';
+import { Paper } from 'material-ui';
 import { CategorySideBarStyle } from './../../styles';
 
 import { CategoryBlock } from './../../components';
+import { CategorySearchBar } from './../../components';
 
 import { receiveSideBarData } from './../../actions';
 
@@ -14,16 +15,18 @@ const lengthCut = (recordArray) => (recordArray.length > 5 ? 5 : recordArray.len
 
 class CategorySideBar extends Component {
     async componentWillMount() {
-        await this.props.receiveSideBarData();
+        await this.props.receiveSideBarData(this.props.categorySearchTerm.term);
     }
 
     async componentDidUpdate(prevProps) {
         if (prevProps.postRecordResult !== this.props.postRecordResult && this.props.postRecordResult === 'Succesful') {
-            await this.props.receiveSideBarData();
+            await this.props.receiveSideBarData(this.props.categorySearchTerm.term);
         } else if (prevProps.readUploadedFileResult !== this.props.readUploadedFileResult && this.props.readUploadedFileResult.success) {
-            await this.props.receiveSideBarData();
+            await this.props.receiveSideBarData(this.props.categorySearchTerm.term);
         } else if (prevProps.deleteRecords !== this.props.deleteRecords && this.props.deleteRecords.success) {
-            await this.props.receiveSideBarData();
+            await this.props.receiveSideBarData(this.props.categorySearchTerm.term);
+        } else if (prevProps.categorySearchTerm !== this.props.categorySearchTerm) {
+            await this.props.receiveSideBarData(this.props.categorySearchTerm.term);
         }
     }
 
@@ -37,10 +40,8 @@ class CategorySideBar extends Component {
 
             return (
                 <Paper>
-                    {records.map(record => (
-                        <CategoryBlock 
-                            record={record}
-                        />
+                    {records.map((record, index) => (
+                        <CategoryBlock key={index} record={record} />
                     ))}
                 </Paper>
             )
@@ -56,6 +57,7 @@ class CategorySideBar extends Component {
 
         return(
             <Fragment>
+                <CategorySearchBar />
                 {this.renderSideBar(this.props.sideBarData)}
             </Fragment>
         )
@@ -67,7 +69,8 @@ function mapStateToProps(state) {
         sideBarData: state.sideBarData,
         postRecordResult: state.postRecordResult,
         readUploadedFileResult: state.readUploadedFile,
-        deleteRecords: state.deleteRecords
+        deleteRecords: state.deleteRecords,
+        categorySearchTerm: state.categorySearchTerm
     }
 }
 

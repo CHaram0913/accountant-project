@@ -119,11 +119,21 @@ module.exports = app => {
         }
     });
 
-    app.get('/api/record', async (req, res) => {
+    app.post('/api/record', async (req, res) => {
         try {
             let data = await Record.aggregate([
                 {
                     $match : { account : req.session.passport.user }
+                },
+                {
+                    $match : { 
+                        $or: [
+                            { 'category.category' : { '$regex' : req.body.term, '$options': 'i' } },
+                            { 'category.subCategory' : { '$regex' : req.body.term, '$options': 'i' } },
+                            { 'detail.payee' : { '$regex' : req.body.term, '$options': 'i' } },
+                            { 'detail.memo' : { '$regex' : req.body.term, '$options': 'i' } }
+                        ]
+                    }
                 },
                 {
                     $sort : { recordTime : -1 }
@@ -147,11 +157,21 @@ module.exports = app => {
         }
     });
 
-    app.get('/api/record/categories', async (req, res) => {
+    app.post('/api/record/categories', async (req, res) => {
         try {
             let data = await Record.aggregate([
                 {
                     $match : { account : req.session.passport.user, type : 'expense' }
+                },
+                {
+                    $match : { 
+                        $or: [
+                            { 'category.category' : { '$regex' : req.body.term, '$options': 'i' } },
+                            { 'category.subCategory' : { '$regex' : req.body.term, '$options': 'i' } },
+                            { 'detail.payee' : { '$regex' : req.body.term, '$options': 'i' } },
+                            { 'detail.memo' : { '$regex' : req.body.term, '$options': 'i' } }
+                        ]
+                    }
                 },
                 {
                     $sort : { recordTime : -1 }
@@ -172,8 +192,8 @@ module.exports = app => {
                 {
                     $project : {
                         interval: '$category',
-                        latest_transaction : { $dateToString: { format: "%Y-%m-%d", date: "$latest_transaction" } },
-                        average_spending : { $multiply : [{ $trunc: { $divide: [ "$average_amount", -100 ] } }, 100] },
+                        latest_transaction : { $dateToString: { format: '%Y-%m-%d', date: '$latest_transaction' } },
+                        average_spending : { $multiply : [{ $trunc: { $divide: [ '$average_amount', -100 ] } }, 100] },
                         latest_payee : '$latest_payee',
                         count : '$count'
                     }
@@ -194,8 +214,8 @@ module.exports = app => {
     });
 
     app.post('/api/record/csv', async (req, res) => {
-        let file_name = 'my_record.csv';
-        let file_path = './';
+        let file_name = `${req.session.passport.user}_my_record.csv`;
+        let file_path = './backup/';
 
         try {
             let csv_file = 'Date,Interval,Category,Income?,Notification?,Amount,Payee,Memo\r\n';
@@ -237,8 +257,17 @@ module.exports = app => {
         }
     });
 
+    app.get('/api/record/download_csv', (req, res) => {
+        try {
+            let file = `./backup/${req.session.passport.user}_my_record.csv`;
+            res.download(file);
+        } catch(e) {
+            res.send(e.message);
+        }
+    });
+
     app.post('/api/record/excel', async (req, res) => {
-        let file_name = 'my_record.xlsx';
+        let file_name = `./backup/${req.session.passport.user}_my_record.xlsx`;
 
         try {
             let formatted_json = [];
@@ -268,12 +297,20 @@ module.exports = app => {
             const workbook = { SheetNames: [], Sheets: {}, Props: {} }
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
             XLSX.writeFile(workbook, file_name);
-
+            
             res.json({ success: true, data: '' });
 
         } catch(e) {
-
             res.json({ success: false, data: e.message });
+        }
+    });
+
+    app.get('/api/record/download_excel', async (req, res) => {
+        try {
+            let file = `./backup/${req.session.passport.user}_my_record.xlsx`;
+            res.download(file);
+        } catch(e) {
+            res.send(e.message);
         }
     });
 

@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { NativeTypes } from 'react-dnd-html5-backend'
 import { DropTarget } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import { withStyles } from 'material-ui/styles';
-import { Paper, Typography } from 'material-ui';
+import { Paper } from 'material-ui';
 import { RecordTableDropTargetStyle } from './../../styles';
 
 import { RecordTable } from './../../containers';

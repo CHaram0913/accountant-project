@@ -28,7 +28,7 @@ export default class App extends Component {
     render() {
         return (
             <DragDropContextProvider backend={HTML5Backend}>
-                <Fragment>         
+                <Fragment>     
                     <Reboot />
                     <Router history={history}>
                         { mainSwitch }

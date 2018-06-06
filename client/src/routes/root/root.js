@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 import { withStyles } from 'material-ui/styles';
-import { Paper, Grid, Typography } from 'material-ui';
+import { Paper, Grid } from 'material-ui';
 import { RootRouteStyle } from './../../styles';
 
 import { TargetTableContainer } from './../../components';
