@@ -1,6 +1,6 @@
 export default theme => ({
     root: {
-        padding: '20px'
+        padding: '20px',
     },
     dnd_container_paper: {
         marginLeft: '20px',

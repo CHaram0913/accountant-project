@@ -13,17 +13,9 @@ import { createCsv, createExcel, clearFileResult } from './../../actions';
 class DownloadButton extends Component {
     async componentDidUpdate(prevProps) {
         if (prevProps.csvFileResult !== this.props.csvFileResult && this.props.csvFileResult.success) {
-            
-            //history.push('/api/record/download_csv');
-            console.log(this.props.csvFileResult)
+            window.location.href = '/api/record/download_csv';
         } else if (prevProps.excelFileResult !== this.props.excelFileResult && this.props.excelFileResult.success) {
-            // let res = await axios.get('/api/record/download_excel');
-            // let xhr = new XMLHttpRequest();
-            // xhr.open('GET', '/api/record/download_excel');
-            // xhr.send();
-            // history.push('/api/record/download_excel');
-
-            console.log(this.props.excelFileResult)
+            window.location.href = '/api/record/download_excel';
         }
     }
 
