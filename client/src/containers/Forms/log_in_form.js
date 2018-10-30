@@ -29,7 +29,7 @@ const validate = values => {
 class LogInForm extends Component {
     async onSubmit(values) {
         await this.props.logInToAccount(values);
-
+        
         if (this.props.postLogInResult.accountLoggedIn) {
             this.props.clearPostLogInResult();
             history.push('/')

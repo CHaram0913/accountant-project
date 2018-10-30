@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 
 import { withStyles } from 'material-ui/styles';
 import { Paper, Grid, Checkbox } from 'material-ui';
@@ -140,6 +141,18 @@ class RecordTable extends Component {
         return sum;
     }
 
+    getSortOfTotal = total => {
+        const ci = {
+            ppc: 4500,
+            cpw: 3
+        };
+        
+        const startDate = moment([2018, 5, 20]);
+        const currentDate = moment(moment().tz('Asia/Seoul').format('YYYY-MM-DD').split('-'));
+        
+        return total + Math.floor(startDate.diff(currentDate, 'days') / 7 + 1) * ci.cpw * ci.ppc
+    }
+
     getSelectedData(data, selected) {
         if (data.length !== 0 && selected.length === 0) {
             return data;
@@ -223,6 +236,7 @@ class RecordTable extends Component {
 
         let total = this.getTotal(data, selected);
         let selectedData = this.getSelectedData(data, selected);
+        const sortOfAcutalTotal = this.getSortOfTotal(total);
 
         return(
             <Paper className={classes.root} id='record-table-root-paper'>
@@ -230,6 +244,7 @@ class RecordTable extends Component {
                     numSelected={selected.length}
                     selected={selected}
                     total={total}
+                    sortOfAcutalTotal={sortOfAcutalTotal}
                 />
                 {this.renderTable(this.props.tableData, data, order, orderBy, selected, rowsPerPage, page)}
                 <TablePagination 

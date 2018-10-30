@@ -4,9 +4,11 @@ const expressSession = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
+const path = require('path');
 const envResult = require('dotenv').config();
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, label, prettyPrint } = format;
+
 const CONFIGS = process.env.ENV === 'prod' ?
     require('./configs/production') :
     process.env.ENV === 'dev' ?
@@ -93,13 +95,17 @@ passport.deserializeUser(function (_id, done) {
 require('./routes/records')(app);
 require('./routes/user')(app);
 
+if(process.env.ENV ==='prod'){
+    app.use(express.static(path.resolve(__dirname, 'client', 'build')))
+    
+    app.get('*', (req,res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
+
 /**
  * Start
- * */
+ **/
 app.listen(CONFIGS.PORT, () => {
     logger.info(`Server Running at PORT : ${CONFIGS.PORT}`);
 });
-
-module.exports = {
-    passport
-}

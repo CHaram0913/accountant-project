@@ -14,7 +14,7 @@ class RecordTableToolbar extends Component {
     }
 
     render() {
-        const { classes, numSelected, selected, total } = this.props;
+        const { classes, numSelected, selected, total, sortOfAcutalTotal } = this.props;
 
         return (
             <Toolbar className={classes.root}>
@@ -26,7 +26,7 @@ class RecordTableToolbar extends Component {
                             </Typography>
                         ) : (
                             <Typography variant='display1'>
-                                Your Budget: <b> {total} Won </b>
+                                Your Budget: <b> {sortOfAcutalTotal} Won (<span style={{ color: 'blue' }}>{total}</span>) </b>
                             </Typography>
                         )}  
                     </Grid>
